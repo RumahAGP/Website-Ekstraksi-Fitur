@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekstraksi Fitur Gambar</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Header -->
+        <header class="header">
+            <h1>🖼️ Ekstraksi Fitur Gambar</h1>
+            <p>Histogram • Canny • Sobel • Thresholding • Segmentasi</p>
+        </header>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <h2>📤 Upload Gambar</h2>
+            
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            <label for="imageInput" class="upload-box">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Klik untuk upload gambar</div>
+                <div class="upload-hint">PNG, JPG, JPEG, BMP (Max 16MB)</div>
+            </label>
+            
+            <button id="processBtn" class="btn btn-primary" disabled>🚀 Proses Gambar</button>
+        </section>
+
+        <!-- Loading -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Memproses gambar...</p>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="results hidden">
+            
+            <!-- Image Info -->
+            <div class="card info-card">
+                <h3>ℹ️ Informasi Gambar</h3>
+                <div id="imageInfo"></div>
+            </div>
+
+            <!-- Original Image -->
+            <div class="card">
+                <h3>📸 Gambar Asli</h3>
+                <img id="originalImage" src="" alt="Original">
+            </div>
+
+            <!-- 1. Grayscale -->
+            <div class="card full-width">
+                <h3>1️⃣ Histogram Grayscale</h3>
+                <p class="description" id="desc-grayscale"></p>
+                <div class="result-grid-2">
+                    <div>
+                        <h4>Gambar Grayscale</h4>
+                        <img id="img-grayscale" src="" alt="Grayscale">
+                    </div>
+                    <div>
+                        <h4>Histogram</h4>
+                        <img id="hist-grayscale" src="" alt="Histogram">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Histogram Equalization -->
+            <div class="card full-width">
+                <h3>2️⃣ Histogram Equalization</h3>
+                <p class="description" id="desc-equalization"></p>
+                <div class="result-grid-2">
+                    <div>
+                        <h4>Sebelum Equalization</h4>
+                        <img id="img-eq-before" src="" alt="Before">
+                        <img id="hist-eq-before" src="" alt="Histogram Before">
+                    </div>
+                    <div>
+                        <h4>Setelah Equalization</h4>
+                        <img id="img-eq-after" src="" alt="After">
+                        <img id="hist-eq-after" src="" alt="Histogram After">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Canny -->
+            <div class="card full-width">
+                <h3>3️⃣ Canny Edge Detection</h3>
+                <p class="description" id="desc-canny"></p>
+                <div class="result-grid-4">
+                    <div>
+                        <h4>Original</h4>
+                        <img id="img-canny-orig" src="" alt="Original">
+                    </div>
+                    <div>
+                        <h4>Threshold: 50-150</h4>
+                        <img id="img-canny-1" src="" alt="Canny 1">
+                    </div>
+                    <div>
+                        <h4>Threshold: 100-200</h4>
+                        <img id="img-canny-2" src="" alt="Canny 2">
+                    </div>
+                    <div>
+                        <h4>Threshold: 150-250</h4>
+                        <img id="img-canny-3" src="" alt="Canny 3">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Sobel -->
+            <div class="card full-width">
+                <h3>4️⃣ Sobel Edge Detection</h3>
+                <p class="description" id="desc-sobel"></p>
+                <div class="result-grid-3">
+                    <div>
+                        <h4>Sobel X (Horizontal)</h4>
+                        <img id="img-sobel-x" src="" alt="Sobel X">
+                    </div>
+                    <div>
+                        <h4>Sobel Y (Vertical)</h4>
+                        <img id="img-sobel-y" src="" alt="Sobel Y">
+                    </div>
+                    <div>
+                        <h4>Sobel Magnitude</h4>
+                        <img id="img-sobel-mag" src="" alt="Sobel Magnitude">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Thresholding -->
+            <div class="card full-width">
+                <h3>5️⃣ Thresholding / Binarisasi</h3>
+                <p class="description" id="desc-threshold"></p>
+                <div class="result-grid-3">
+                    <div>
+                        <h4>Binary (127)</h4>
+                        <img id="img-thresh-bin" src="" alt="Binary">
+                    </div>
+                    <div>
+                        <h4>Binary Inverse</h4>
+                        <img id="img-thresh-inv" src="" alt="Binary Inv">
+                    </div>
+                    <div>
+                        <h4>Otsu's Method</h4>
+                        <img id="img-thresh-otsu" src="" alt="Otsu">
+                    </div>
+                    <div>
+                        <h4>Adaptive Mean</h4>
+                        <img id="img-thresh-adapt-mean" src="" alt="Adaptive Mean">
+                    </div>
+                    <div>
+                        <h4>Adaptive Gaussian</h4>
+                        <img id="img-thresh-adapt-gauss" src="" alt="Adaptive Gaussian">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Segmentation -->
+            <div class="card full-width">
+                <h3>6️⃣ Segmentasi Citra</h3>
+                <p class="description" id="desc-segmentation"></p>
+                <div class="result-grid-3">
+                    <div>
+                        <h4>Binary Mask</h4>
+                        <img id="img-seg-binary" src="" alt="Binary">
+                    </div>
+                    <div>
+                        <h4>Contour Detection</h4>
+                        <img id="img-seg-contours" src="" alt="Contours">
+                        <p id="contour-count" class="stat"></p>
+                    </div>
+                    <div>
+                        <h4>Watershed Segmentation</h4>
+                        <img id="img-seg-watershed" src="" alt="Watershed">
+                    </div>
+                    <div>
+                        <h4>K-Means Segmentation</h4>
+                        <img id="img-seg-kmeans" src="" alt="K-Means">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
